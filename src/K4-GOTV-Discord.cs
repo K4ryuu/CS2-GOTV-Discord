@@ -65,6 +65,8 @@ namespace K4ryuuCS2GOTVDiscord
 			[JsonPropertyName("crop-rounds-file-naming-pattern")]
 			public string CropRoundsFileNamingPattern { get; set; } = "{fileName}_{map}_round{round}_{date}_{time}";
 
+			[JsonPropertyName("demo-directory")]
+			public string DemoDirectory { get; set; } = "discord_demos";
 		}
 
 		public class DiscordSettings
@@ -101,6 +103,9 @@ namespace K4ryuuCS2GOTVDiscord
 
 			[JsonPropertyName("stop-on-idle")]
 			public bool StopOnIdle { get; set; } = false;
+
+			[JsonPropertyName("record-warmup")]
+			public bool RecordWarmup { get; set; } = true;
 
 			[JsonPropertyName("idle-player-count-threshold")]
 			public int IdlePlayerCountThreshold { get; set; } = 0;
@@ -162,7 +167,7 @@ namespace K4ryuuCS2GOTVDiscord
 	public class CS2GOTVDiscordPlugin : BasePlugin, IPluginConfig<PluginConfig>
 	{
 		public override string ModuleName => "CS2 GOTV Discord";
-		public override string ModuleVersion => "1.3.3";
+		public override string ModuleVersion => "1.3.4";
 		public override string ModuleAuthor => "K4ryuu @ KitsuneLab";
 
 		public required PluginConfig Config { get; set; } = new PluginConfig();
@@ -175,6 +180,7 @@ namespace K4ryuuCS2GOTVDiscord
 		public bool IsPluginExecution = false;
 		public bool PluginRecording = false;
 		public int maxFileSizeInMB = 25;
+		private string DemoDirectory => Path.Combine(Server.GameDirectory, "csgo", Config.General.DemoDirectory);
 
 		public override void Load(bool hotReload)
 		{
@@ -201,13 +207,18 @@ namespace K4ryuuCS2GOTVDiscord
 
 			RegisterEventHandler((EventRoundStart @event, GameEventInfo info) =>
 			{
-				if (Config.AutoRecord.Enabled && Config.AutoRecord.CropRounds)
+				if (Config.AutoRecord.Enabled)
 				{
-					if (DemoStartTime != 0.0)
-						Server.ExecuteCommand("tv_stoprecord");
+					if (Config.AutoRecord.CropRounds)
+					{
+						if (DemoStartTime != 0.0)
+							Server.ExecuteCommand("tv_stoprecord");
 
-					Requesters.Clear();
-					Server.NextWorldUpdate(() => Server.ExecuteCommand("tv_record \"autodemo\""));
+						Requesters.Clear();
+					}
+
+					if (string.IsNullOrEmpty(fileName) || DemoStartTime == 0.0)
+						Server.NextWorldUpdate(() => Server.ExecuteCommand("tv_record \"autodemo\""));
 				}
 
 				return HookResult.Continue;
@@ -267,10 +278,8 @@ namespace K4ryuuCS2GOTVDiscord
 		{
 			if (Config.General.DeleteEveryDemoFromServerAfterServerStart)
 			{
-				string directoryPath = Path.Combine(Server.GameDirectory, "csgo", "discord_demos");
-
-				string[] demoFiles = Directory.GetFiles(directoryPath, "*.dem");
-				string[] zipFiles = Directory.GetFiles(directoryPath, "*.zip");
+				string[] demoFiles = Directory.GetFiles(DemoDirectory, "*.dem");
+				string[] zipFiles = Directory.GetFiles(DemoDirectory, "*.zip");
 
 				string[] allFiles = demoFiles.Concat(zipFiles).ToArray();
 
@@ -298,6 +307,9 @@ namespace K4ryuuCS2GOTVDiscord
 			if (PluginRecording)
 				return HookResult.Continue;
 
+			if (!Config.AutoRecord.RecordWarmup && GameRules()?.GameRules?.WarmupPeriod == true)
+				return HookResult.Continue;
+
 			if (!IsPluginExecution)
 			{
 				IsPluginExecution = true;
@@ -314,22 +326,22 @@ namespace K4ryuuCS2GOTVDiscord
 				fileName = ReplacePlaceholdersForFileName(pattern, baseFileName);
 
 				// Ensure unique filename
-				string fullPath = Path.Combine(Server.GameDirectory, "csgo", "discord_demos", $"{fileName}.dem");
+				string fullPath = Path.Combine(DemoDirectory, $"{fileName}.dem");
 				int counter = 1;
 				while (File.Exists(fullPath))
 				{
 					fileName = $"{fileName}_{counter}";
-					fullPath = Path.Combine(Server.GameDirectory, "csgo", "discord_demos", $"{fileName}.dem");
+					fullPath = Path.Combine(DemoDirectory, $"{fileName}.dem");
 					counter++;
 				}
 
-				Server.ExecuteCommand($"tv_record \"discord_demos/{fileName}.dem\"");
+				string relativePath = Path.Combine(Config.General.DemoDirectory, $"{fileName}.dem");
+				Server.ExecuteCommand($"tv_record \"{relativePath}\"");
 				return HookResult.Stop;
 			}
 			else
 			{
 				PluginRecording = true;
-
 				IsPluginExecution = false;
 				return HookResult.Continue;
 			}
@@ -342,15 +354,13 @@ namespace K4ryuuCS2GOTVDiscord
 
 			PluginRecording = false;
 
-			Logger.LogInformation("Recording stopped. Filename: {0}", fileName);
-
 			if (string.IsNullOrEmpty(fileName))
 			{
 				ResetVariables();
 				return HookResult.Continue;
 			}
 
-			string demoPath = Path.Combine(Server.GameDirectory, "csgo", "discord_demos", $"{fileName}.dem");
+			string demoPath = Path.Combine(DemoDirectory, $"{fileName}.dem");
 
 			if (!File.Exists(demoPath))
 			{
@@ -378,7 +388,7 @@ namespace K4ryuuCS2GOTVDiscord
 
 		public void ProcessUpload(string fileName, string demoPath)
 		{
-			string zipPath = Path.Combine(Server.GameDirectory, "csgo", "discord_demos", $"{fileName}.zip");
+			string zipPath = Path.Combine(DemoDirectory, $"{fileName}.zip");
 
 			var demoLength = TimeSpan.FromSeconds(Server.EngineTime - DemoStartTime);
 			var placeholderValues = new Dictionary<string, string>
@@ -674,6 +684,23 @@ namespace K4ryuuCS2GOTVDiscord
 		{
 			if (config.Version < Config.Version)
 				base.Logger.LogWarning("Configuration version mismatch (Expected: {0} | Current: {1})", this.Config.Version, config.Version);
+
+			if (string.IsNullOrWhiteSpace(config.General.DemoDirectory))
+			{
+				base.Logger.LogWarning("DemoDirectory is empty, using default 'discord_demos'");
+				config.General.DemoDirectory = "discord_demos";
+			}
+
+			string fullDemoPath = Path.Combine(Server.GameDirectory, "csgo", config.General.DemoDirectory);
+			try
+			{
+				Directory.CreateDirectory(fullDemoPath);
+			}
+			catch (Exception ex)
+			{
+				base.Logger.LogError($"Failed to create demo directory: {ex.Message}");
+				config.General.DemoDirectory = "discord_demos"; // Fallback to default
+			}
 
 			if (config.DemoRequest.Enabled)
 			{

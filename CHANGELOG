@@ -1,3 +1,8 @@
+-- 2024.11.11 - v1.3.3
+
+- feat: Added new config to enable/disable warmup recording
+- feat: Added safety measurements to start the recording always if not recording, but set to auto-record
+
 -- 2024.10.15 - v1.3.3 - @originalaidn patch
 
 - feat: Added option to set the Discord server's boost level to increase the file size limit automatically to it
