@@ -2,6 +2,7 @@
 
 - feat: Added new config to enable/disable warmup recording
 - feat: Added safety measurements to start the recording always if not recording, but set to auto-record
+- feat: Added new config to change output folder
 
 -- 2024.10.15 - v1.3.3 - @originalaidn patch
 
