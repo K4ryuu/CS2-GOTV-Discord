@@ -2,6 +2,7 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Core.Attributes;
+using CounterStrikeSharp.API.Modules.Timers;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using FluentFTP;
@@ -260,7 +261,7 @@ namespace K4ryuuCS2GOTVDiscord
 					{
 						LastPlayerCheckTime = Server.EngineTime;
 					}
-				});
+				}, TimerFlags.REPEAT);
 			}
 
 			if (Config.AutoRecord.Enabled && hotReload)
