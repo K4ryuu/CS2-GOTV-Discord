@@ -248,7 +248,7 @@ namespace K4ryuuCS2GOTVDiscord
 					if (DemoStartTime == 0.0)
 						return;
 
-					if (GetPlayerCount() <= Config.AutoRecord.IdlePlayerCountThreshold)
+					if (GetPlayerCount() < Config.AutoRecord.IdlePlayerCountThreshold)
 					{
 						double idleTime = Server.EngineTime - LastPlayerCheckTime;
 						if (idleTime > Config.AutoRecord.IdleTimeSeconds)
