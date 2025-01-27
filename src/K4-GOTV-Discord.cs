@@ -525,7 +525,7 @@ namespace K4ryuuCS2GOTVDiscord
 					//move this here, so we can store the file in db
 					long fileSizeInBytes = new FileInfo(zipPath).Length;
 					long fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-
+					long fileSizeInKB = fileSizeInBytes / 1024;
 					//Store them only if there is mega link or ftp link, since we for web inegration we need valid links to donwload from
 					if (DatabaseBuilder != null && (placeholderValues["mega_link"] != "" || placeholderValues["ftp_link"] != ""))
 						try
@@ -539,7 +539,7 @@ namespace K4ryuuCS2GOTVDiscord
 							) VALUES (
 								@map, @date, @time, @timedate, @length, @round, @mega_link, @ftp_link,
 								@requester_name, @requester_steamid, @requester_count,
-								@player_count, @server_name, @fileName, @fileSize
+								@player_count, @server_name, @fileName, @fileSizeInKB
 							);";
 							await using var connection = new MySqlConnection(DatabaseBuilder.ConnectionString);
 							await connection.OpenAsync();
@@ -560,7 +560,7 @@ namespace K4ryuuCS2GOTVDiscord
 								player_count = int.Parse(placeholderValues["player_count"]),
 								server_name = placeholderValues["server_name"],
 								fileName = placeholderValues["fileName"],
-								fileSize = fileSizeInMB,
+								fileSizeInKB = fileSizeInKB,
 							});
 
 							Logger.LogInformation($"Data successfully inserted into table {tableName}");
