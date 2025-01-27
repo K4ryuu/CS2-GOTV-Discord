@@ -16,6 +16,8 @@
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Dapper" Version="2.1.44" />
+    <PackageReference Include="MySqlConnector" Version="2.3.6" />
     <PackageReference Include="FluentFTP" Version="*" />
     <PackageReference Include="MegaApiClient" Version="*" />
   </ItemGroup>
