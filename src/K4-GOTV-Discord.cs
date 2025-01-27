@@ -526,8 +526,9 @@ namespace K4ryuuCS2GOTVDiscord
 					long fileSizeInBytes = new FileInfo(zipPath).Length;
 					long fileSizeInMB = fileSizeInBytes / (1024 * 1024);
 					long fileSizeInKB = fileSizeInBytes / 1024;
-					//Store them only if there is mega link or ftp link, since we for web inegration we need valid links to donwload from
-					if (DatabaseBuilder != null && (placeholderValues["mega_link"] != "" || placeholderValues["ftp_link"] != ""))
+					//Store them only if mega link or ftp link is not Not uploa uploaded to X.
+					//As for web integration there no need to have record that cannot be downloaded ?
+					if (DatabaseBuilder != null && (placeholderValues["mega_link"] != "Not uploaded to Mega." || placeholderValues["ftp_link"] != "Not uploaded to FTP."))
 						try
 						{
 							string tableName = $"{Config.Database.table_prefix}k4_gotv";
