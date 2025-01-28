@@ -847,7 +847,7 @@ namespace K4ryuuCS2GOTVDiscord
 								player_count INT NOT NULL,                      
 								server_name VARCHAR(255) NOT NULL,    
 								file_name VARCHAR(255) NOT NULL,         
-								file_size BIGINT NOT NULL,                       -- Changed to BIGINT for larger files
+								file_size BIGINT NOT NULL,
 
 								-- Indexes
 								KEY idx_requester_steamid (requester_steamid(50)),  -- Limited index size
@@ -855,7 +855,9 @@ namespace K4ryuuCS2GOTVDiscord
 								KEY idx_date_time (date, time),
 								KEY idx_map (map),
 								KEY idx_map_date_time (map, date, time),
-								KEY idx_server_name (server_name)
+								KEY idx_server_map_date_time (server_name,map, date, time),
+								KEY idx_server_name (server_name),
+								KEY idx_server_map (server_name, map)
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;";
 
 							// Use a local connection
