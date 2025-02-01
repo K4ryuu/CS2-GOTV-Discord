@@ -1,3 +1,13 @@
+-- 2025.02.01 - v2.0.0 Major Update
+
+- feat: Made Discord webhook optional - plugin now works without Discord integration
+- feat: Added MySQL database integration for demo URL storage
+- feat: Complete architectural overhaul for better scalability
+- feat: Improved logging system with more detailed and readable output
+- upgrade: Completely refactored codebase for better performance and maintainability
+- optimise: Core functionalities rewritten for improved efficiency
+- note: This is a major version update with significant changes to the plugin architecture
+
 -- 2024.11.11 - v1.3.3
 
 - feat: Added new config to enable/disable warmup recording

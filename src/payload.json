@@ -4,59 +4,54 @@
   "content": "{message_text}",
   "embeds": [
     {
-      "title": "{embed_title}",
-      "color": 3447003,
+      "title": "New CSGO Demo Available!",
+      "description": "A fresh demo has just been recorded on **{server_name}**. Check out the details below:",
+      "color": 7506394,
       "fields": [
         {
-          "name": "🗺️ Map",
+          "name": "Map",
           "value": "{map}",
           "inline": true
         },
         {
-          "name": "🕒 Duration",
+          "name": "Duration",
           "value": "{length}",
           "inline": true
         },
         {
-          "name": "🔢 Final Round",
+          "name": "Final Round",
           "value": "{round}",
           "inline": true
         },
         {
-          "name": "👥 Players",
+          "name": "Player Count",
           "value": "{player_count}",
           "inline": true
         },
         {
-          "name": "📅 Recording Date",
-          "value": "{date}",
-          "inline": true
-        },
-        {
-          "name": "⏰ Recording Time",
-          "value": "{time}",
-          "inline": true
-        },
-        {
-          "name": "💾 Demo Files",
-          "value": "📁 Original: {fileName}.dem\n🗜️ Compressed: {fileName}.zip",
+          "name": "Recording Date & Time",
+          "value": "**{date}** at **{time}**",
           "inline": false
         },
         {
-          "name": "🔗 Download Links",
-          "value": "☁️ Mega: {mega_link}\n📡 FTP: {ftp_link}",
+          "name": "Demo Files",
+          "value": "**Original:** `{fileName}.dem`\n**Compressed:** `{fileName}.zip`",
           "inline": false
         },
         {
-          "name": "👤 Requesters ({requester_count})",
-          "value": "Names: {requester_name}\nSteam IDs: {requester_steamid}\n\nDetailed:\n{requester_both}",
+          "name": "Download Links",
+          "value": "**Mega:** [Click Here]({mega_link})\n**FTP:** [Click Here]({ftp_link})",
+          "inline": false
+        },
+        {
+          "name": "Requested By ({requester_count})",
+          "value": "**Names:** {requester_name}\n**Steam IDs:** {requester_steamid}\n**Details:**\n{requester_both}",
           "inline": false
         }
       ],
       "footer": {
-        "text": "🖥️ Server: {server_name}"
-      },
-      "timestamp": "{iso_timestamp}"
+        "text": "Recorded on {server_name} • {iso_timestamp}"
+      }
     }
   ]
 }
