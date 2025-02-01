@@ -1,26 +1,26 @@
 <a name="readme-top"></a>
 
-![GitHub tag (with filter)](https://img.shields.io/github/v/tag/K4ryuu/CS2-GOTV-Discord?style=for-the-badge&label=Version)
-![GitHub Repo stars](https://img.shields.io/github/stars/K4ryuu/CS2-GOTV-Discord?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/K4ryuu/CS2-GOTV-Discord?style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/K4ryuu/CS2-GOTV-Discord?style=for-the-badge)
-![GitHub all releases](https://img.shields.io/github/downloads/K4ryuu/CS2-GOTV-Discord/total?style=for-the-badge)
-![GitHub last commit (branch)](https://img.shields.io/github/last-commit/K4ryuu/CS2-GOTV-Discord/dev?style=for-the-badge)
+![GitHub tag (with filter)](https://img.shields.io/github/v/tag/K4ryuu/K4-GOTV?style=for-the-badge&label=Version)
+![GitHub Repo stars](https://img.shields.io/github/stars/K4ryuu/K4-GOTV?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/K4ryuu/K4-GOTV?style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/K4ryuu/K4-GOTV?style=for-the-badge)
+![GitHub all releases](https://img.shields.io/github/downloads/K4ryuu/K4-GOTV/total?style=for-the-badge)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/K4ryuu/K4-GOTV/dev?style=for-the-badge)
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <h1 align="center">KitsuneLab©</h1>
-  <h3 align="center">CS2 GOTV Discord</h3>
+  <h3 align="center">CS2 Advanced GOTV</h3>
   <a align="center">Automatically handles GOTV recording, able to crop demos for every round separately. Sends the recorded demo as zipped to Discord Webhook as attachment or upload to Mega and send the url. Customizable webhook, avatar, bot name, embed and more. Automatically stop recording on idle and additionaly it can be set to be used in request mode, so it records all round separately but upload only those rounds that has been requested by users with !demo.</a>
 
   <p align="center">
     <br />
-    <a href="https://github.com/K4ryuu/CS2-GOTV-Discord/releases">Download</a>
+    <a href="https://github.com/K4ryuu/K4-GOTV/releases">Download</a>
     ·
-    <a href="https://github.com/K4ryuu/CS2-GOTV-Discord/issues/new?assignees=KitsuneLab-Development&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D">Report Bug</a>
+    <a href="https://github.com/K4ryuu/K4-GOTV/issues/new?assignees=KitsuneLab-Development&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D">Report Bug</a>
     ·
-    <a href="https://github.com/K4ryuu/CS2-GOTV-Discord/issues/new?assignees=KitsuneLab-Development&labels=enhancement&projects=&template=feature_request.md&title=%5BREQ%5D">Request Feature</a>
+    <a href="https://github.com/K4ryuu/K4-GOTV/issues/new?assignees=KitsuneLab-Development&labels=enhancement&projects=&template=feature_request.md&title=%5BREQ%5D">Request Feature</a>
   </p>
 </div>
 
