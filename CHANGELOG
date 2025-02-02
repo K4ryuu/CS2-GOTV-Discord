@@ -1,3 +1,7 @@
+-- 2025.02.02 - v2.0.1
+
+- fix: Non-game thread issue on uploading demo
+
 -- 2025.02.01 - v2.0.0 Major Update
 
 - feat: Made Discord webhook optional - plugin now works without Discord integration

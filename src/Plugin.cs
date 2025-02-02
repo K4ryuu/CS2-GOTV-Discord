@@ -10,11 +10,11 @@ using Microsoft.Extensions.Logging;
 namespace K4GOTV;
 
 [MinimumApiVersion(300)]
-public class CS2GOTVDiscordPlugin : BasePlugin, IPluginConfig<PluginConfig>
+public sealed partial class Plugin : BasePlugin, IPluginConfig<PluginConfig>
 {
 	public override string ModuleName => "K4-GOTV";
 	public override string ModuleDescription => "Advanced GOTV handler with Discord, database, FTP, SFTP and Mega integration";
-	public override string ModuleVersion => "2.0.0";
+	public override string ModuleVersion => "2.0.1";
 	public override string ModuleAuthor => "K4ryuu @ KitsuneLab";
 
 	public required PluginConfig Config { get; set; } = new PluginConfig();
@@ -125,7 +125,7 @@ public class CS2GOTVDiscordPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
 	public override void OnAllPluginsLoaded(bool isReload)
 	{
-		Task.Run(async () =>
+		CSSThread.RunOnMainThread(async () =>
 		{
 			if (Config.General.DeleteEveryDemoFromServerAfterServerStart)
 			{
@@ -196,7 +196,7 @@ public class CS2GOTVDiscordPlugin : BasePlugin, IPluginConfig<PluginConfig>
 		if (Config.DemoRequest.Enabled && !DemoRequestedThisRound)
 		{
 			if (Config.DemoRequest.DeleteUnused)
-				Task.Run(() => FileManager.DeleteFileAsync(demoPath, Logger, Config.General.LogDeletions));
+				CSSThread.RunOnMainThread(async () => await FileManager.DeleteFileAsync(demoPath, Logger, Config.General.LogDeletions));
 
 			ResetVariables();
 			return HookResult.Continue;
@@ -238,7 +238,7 @@ public class CS2GOTVDiscordPlugin : BasePlugin, IPluginConfig<PluginConfig>
 			["fileSizeInKB"] = "0"
 		};
 
-		Task.Run(async () =>
+		CSSThread.RunOnMainThread(async () =>
 		{
 			long fileSizeInBytes = 0;
 			try
