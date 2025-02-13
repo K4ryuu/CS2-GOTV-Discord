@@ -10,16 +10,6 @@ public class DatabaseService
 	private readonly string _connectionString;
 	private readonly ILogger _logger;
 
-	const string INSERT_QUERY = @"
-		INSERT INTO `@table` (
-			map, date, time, timedate, length, round, mega_link, ftp_link,
-			requester_name, requester_steamid, requester_count,
-			player_count, server_name, file_name, file_size
-		) VALUES (
-			@map, @date, @time, @timedate, @length, @round, @mega_link, @ftp_link,
-			@requester_name, @requester_steamid, @requester_count,
-			@player_count, @server_name, @fileName, @fileSizeInKB
-		);";
 
 	public DatabaseService(PluginConfig.DatabaseSettings dbConfig, ILogger logger)
 	{
@@ -46,11 +36,21 @@ public class DatabaseService
 		{
 			string tableName = $"{_dbConfig.Table_prefix}k4_gotv";
 
+			string insertQuery = $@"
+			INSERT INTO `{tableName}` (
+				map, date, time, timedate, length, round, mega_link, ftp_link,
+				requester_name, requester_steamid, requester_count,
+				player_count, server_name, file_name, file_size
+			) VALUES (
+				@map, @date, @time, @timedate, @length, @round, @mega_link, @ftp_link,
+				@requester_name, @requester_steamid, @requester_count,
+				@player_count, @server_name, @fileName, @fileSizeInKB
+			);";
+
 			await using var connection = new MySqlConnection(_connectionString);
 			await connection.OpenAsync();
-			await connection.ExecuteAsync(INSERT_QUERY, new
+			await connection.ExecuteAsync(insertQuery, new
 			{
-				table = tableName,
 				map = placeholders["map"],
 				date = placeholders["date"],
 				time = placeholders["time"],
